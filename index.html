@@ -1,23 +1,69 @@
 <!DOCTYPE html>
-<html lang="ja">
 <html>
 <head>
-    <style>
-        body {
-            background-color: black;
-            color: green;
-        }
-    </style>
-    <meta charset="utf-8">
-    <title>test</title>
+    <title>複数セレクト指定のリダイレクト</title>
 </head>
 <body>
-    <font face="sans-serif">
-    <font size="7">
-    <h1>test</h1>
-    <p>OverLay試験場</p>
-    <button onclick="location.href='https://line.me/R/nv/profilePopup/mid=u77807ad7fa0ca727b8abfb65bbd7e99a'">個チャ</button>
-        </font>
-        </font>
+    <input type="number" id="selectCount" placeholder="セレクトの数">
+    <input type="number" id="redirectInterval" placeholder="リダイレクト間隔（ミリ秒）">
+    <button id="addSelectButton">セレクトを追加</button>
+    <button id="startRedirectButton">リダイレクト開始</button>
+    <button id="stopRedirectButton">リダイレクト停止</button>
+
+    <div id="selectContainer"></div>
+
+    <script>
+        let redirectTimer;
+        const selectContainer = document.getElementById("selectContainer");
+
+        document.getElementById("addSelectButton").addEventListener("click", function() {
+            const selectCount = parseInt(document.getElementById("selectCount").value);
+            
+            if (!isNaN(selectCount) && selectCount > 0) {
+                selectContainer.innerHTML = ""; // 既存のセレクトボックスをクリア
+
+                for (let i = 1; i <= selectCount; i++) {
+                    const select = document.createElement("select");
+                    select.id = `redirectSelect${i}`;
+                    select.innerHTML = `
+                        <option value="https://liff-tool.f5.si/">リダイレクト先 1</option>
+                        <option value="https://example.com">リダイレクト先 2</option>
+                        <!-- 他のリダイレクト先を追加 -->
+                    `;
+                    selectContainer.appendChild(select);
+                }
+            } else {
+                alert("セレクトの数を正しく指定してください.");
+            }
+        });
+
+        document.getElementById("startRedirectButton").addEventListener("click", function() {
+            const redirectInterval = parseInt(document.getElementById("redirectInterval").value); // ミリ秒単位
+
+            if (redirectInterval > 0) {
+                const selects = selectContainer.querySelectorAll("select");
+
+                redirectTimer = setInterval(function() {
+                    selects.forEach((select, index) => {
+                        const selectedIndex = select.selectedIndex;
+                        if (selectedIndex !== -1) {
+                            const selectedOption = select.options[selectedIndex];
+                            const redirectUrl = selectedOption.value;
+                            window.location.href = redirectUrl;
+                        }
+                    });
+                }, redirectInterval);
+
+                alert("リダイレクトが開始されました。");
+            } else {
+                alert("リダイレクト間隔を正しく設定してください.");
+            }
+        });
+
+        document.getElementById("stopRedirectButton").addEventListener("click", function() {
+            clearInterval(redirectTimer);
+            alert("リダイレクトが停止されました。");
+        });
+    </script>
 </body>
 </html>
