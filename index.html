@@ -4,6 +4,7 @@
     <title>複数セレクト指定のリダイレクト</title>
 </head>
 <body>
+    <input type="password" id="password" placeholder="パスワード">
     <input type="number" id="selectCount" placeholder="セレクトの数">
     <input type="number" id="redirectInterval" placeholder="リダイレクト間隔（ミリ秒）">
     <button id="addSelectButton">セレクトを追加</button>
@@ -15,6 +16,8 @@
     <script>
         let redirectTimer;
         const selectContainer = document.getElementById("selectContainer");
+
+        const passwords = ["NameTool001", "AnotherPassword"]; // 複数のパスワードを配列で管理
 
         document.getElementById("addSelectButton").addEventListener("click", function() {
             const selectCount = parseInt(document.getElementById("selectCount").value);
@@ -38,25 +41,32 @@
         });
 
         document.getElementById("startRedirectButton").addEventListener("click", function() {
-            const redirectInterval = parseInt(document.getElementById("redirectInterval").value); // ミリ秒単位
+            const enteredPassword = document.getElementById("password").value;
 
-            if (redirectInterval > 0) {
-                const selects = selectContainer.querySelectorAll("select");
+            // 入力されたパスワードが passwords 配列に含まれているかチェック
+            if (passwords.includes(enteredPassword)) {
+                const redirectInterval = parseInt(document.getElementById("redirectInterval").value); // ミリ秒単位
 
-                redirectTimer = setInterval(function() {
-                    selects.forEach((select, index) => {
-                        const selectedIndex = select.selectedIndex;
-                        if (selectedIndex !== -1) {
-                            const selectedOption = select.options[selectedIndex];
-                            const redirectUrl = selectedOption.value;
-                            window.location.href = redirectUrl;
-                        }
-                    });
-                }, redirectInterval);
+                if (redirectInterval > 0) {
+                    const selects = selectContainer.querySelectorAll("select");
 
-                alert("リダイレクトが開始されました。");
+                    redirectTimer = setInterval(function() {
+                        selects.forEach((select, index) => {
+                            const selectedIndex = select.selectedIndex;
+                            if (selectedIndex !== -1) {
+                                const selectedOption = select.options[selectedIndex];
+                                const redirectUrl = selectedOption.value;
+                                window.location.href = redirectUrl;
+                            }
+                        });
+                    }, redirectInterval);
+
+                    alert("リダイレクトが開始されました。");
+                } else {
+                    alert("リダイレクト間隔を正しく設定してください.");
+                }
             } else {
-                alert("リダイレクト間隔を正しく設定してください.");
+                alert("パスワードが正しくありません。");
             }
         });
 
