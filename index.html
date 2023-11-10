@@ -4,10 +4,10 @@
     <title>複数セレクト指定のリダイレクト</title>
 </head>
 <body>
-    <input type="password" id="password" placeholder="パスワード">
+    <input id="password" placeholder="パスワード">
     <input type="number" id="selectCount" placeholder="セレクトの数">
-    <input type="number" id="redirectInterval" placeholder="リダイレクト間隔（ミリ秒）">
     <button id="addSelectButton">セレクトを追加</button>
+    <input type="number" id="redirectInterval" placeholder="リダイレクト間隔（ミリ秒）">
     <button id="startRedirectButton">リダイレクト開始</button>
     <button id="stopRedirectButton">リダイレクト停止</button>
 
@@ -31,7 +31,6 @@
                     select.innerHTML = `
                         <option value="https://liff-tool.f5.si/">リダイレクト先 1</option>
                         <option value="https://example.com">リダイレクト先 2</option>
-                        <!-- 他のリダイレクト先を追加 -->
                     `;
                     selectContainer.appendChild(select);
                 }
