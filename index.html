@@ -1,50 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>複数セレクト指定のリダイレクト</title>
+    <title>半自動共有ツール(オプション)</title>
+    <style>
+        /* 以前のCSSは省略 */
+    </style>
 </head>
 <body>
     <input id="password" placeholder="パスワード">
-    <input type="number" id="selectCount" placeholder="セレクトの数">
-    <button id="addSelectButton">セレクトを追加</button>
-    <input type="number" id="redirectInterval" placeholder="リダイレクト間隔（ミリ秒）">
-    <button id="startRedirectButton">リダイレクト開始</button>
-    <button id="stopRedirectButton">リダイレクト停止</button>
-
+    <input type="number" id="selectCount" placeholder="セレクトの作成">
+    <button id="addSelectButton">セレクトを作成</button>
     <div id="selectContainer"></div>
+    <input type="number" id="redirectInterval" placeholder="共有の間隔（ミリ秒）">
+    <button id="startRedirectButton">半自動共有開始</button>
+    <button id="stopRedirectButton"> 　共有停止　 </button>
 
     <script>
         let redirectTimer;
         const selectContainer = document.getElementById("selectContainer");
 
-        const passwords = ["NameTool001", "AnotherPassword"]; // 複数のパスワードを配列で管理
+        const passwords = ["NameTool001", "CalenskJQQgjm3"];
 
         document.getElementById("addSelectButton").addEventListener("click", function() {
-            const selectCount = parseInt(document.getElementById("selectCount").value);
-            
-            if (!isNaN(selectCount) && selectCount > 0) {
-                selectContainer.innerHTML = ""; // 既存のセレクトボックスをクリア
-
-                for (let i = 1; i <= selectCount; i++) {
-                    const select = document.createElement("select");
-                    select.id = `redirectSelect${i}`;
-                    select.innerHTML = `
-                        <option value="https://liff-tool.f5.si/">リダイレクト先 1</option>
-                        <option value="https://example.com">リダイレクト先 2</option>
-                    `;
-                    selectContainer.appendChild(select);
-                }
-            } else {
-                alert("セレクトの数を正しく指定してください.");
-            }
+            // セレクトの作成処理
         });
 
         document.getElementById("startRedirectButton").addEventListener("click", function() {
             const enteredPassword = document.getElementById("password").value;
 
-            // 入力されたパスワードが passwords 配列に含まれているかチェック
             if (passwords.includes(enteredPassword)) {
-                const redirectInterval = parseInt(document.getElementById("redirectInterval").value); // ミリ秒単位
+                const redirectInterval = parseInt(document.getElementById("redirectInterval").value);
 
                 if (redirectInterval > 0) {
                     const selects = selectContainer.querySelectorAll("select");
@@ -55,14 +40,17 @@
                             if (selectedIndex !== -1) {
                                 const selectedOption = select.options[selectedIndex];
                                 const redirectUrl = selectedOption.value;
-                                window.location.href = redirectUrl;
+
+                                const redirectCountHex = redirectTimer.toString(16);
+                                const urlWithRedirectCount = `${redirectUrl}&redirectCount=${redirectCountHex}`;
+                                window.location.href = urlWithRedirectCount;
                             }
                         });
                     }, redirectInterval);
 
-                    alert("リダイレクトが開始されました。");
+                    alert("半自動共有が開始されました。");
                 } else {
-                    alert("リダイレクト間隔を正しく設定してください.");
+                    alert("共有の間隔を正しく設定してください。");
                 }
             } else {
                 alert("パスワードが正しくありません。");
