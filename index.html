@@ -17,7 +17,6 @@
 
     <script>
         let redirectTimer;
-        let redirectCount = 0;
         const selectContainer = document.getElementById("selectContainer");
 
         const passwords = ["NameTool001", "CalenskJQQgjm3"];
@@ -55,13 +54,9 @@
                                 const selectedOption = select.options[selectedIndex];
                                 const redirectUrl = selectedOption.value;
 
-                                // 修正: リダイレクト回数を16進数で表し、URLに追加
-                                const redirectCountHex = redirectCount.toString(16);
-                                const urlWithRedirectCount = `${redirectUrl}&redirectCount=${redirectCountHex}`;
+                                // 修正: リダイレクト回数を直接URLに追加
+                                const urlWithRedirectCount = `${redirectUrl}&redirectCount=${redirectTimer}`;
                                 window.location.href = urlWithRedirectCount;
-
-                                // 修正: リダイレクト回数を更新
-                                redirectCount++;
                             }
                         });
                     }, redirectInterval);
