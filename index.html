@@ -22,7 +22,20 @@
         const passwords = ["NameTool001", "CalenskJQQgjm3"];
 
         document.getElementById("addSelectButton").addEventListener("click", function() {
-            // セレクトの作成処理
+            const selectCount = parseInt(document.getElementById("selectCount").value);
+
+            if (!isNaN(selectCount) && selectCount > 0) {
+                selectContainer.innerHTML = "";
+
+                for (let i = 1; i <= selectCount; i++) {
+                    const select = document.createElement("select");
+                    select.id = `redirectSelect${i}`;
+                    select.innerHTML = `<option value="line://share?text=test">テスト</option>`;
+                    selectContainer.appendChild(select);
+                }
+            } else {
+                alert("セレクトの数を正しく指定してください.");
+            }
         });
 
         document.getElementById("startRedirectButton").addEventListener("click", function() {
